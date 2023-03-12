@@ -42,6 +42,21 @@ func (s *Store[K, T]) SetupTables() error {
 	return nil
 }
 
+// DestroyTables drops all tables and thus removes all data from the database.
+func (s *Store[K, T]) DestroyTables() error {
+	_, err := s.db.Exec(dropEdgesTableSQL(s.config))
+	if err != nil {
+		return fmt.Errorf("failed to set up %s table: %w", s.config.EdgesTable, err)
+	}
+
+	_, err = s.db.Exec(dropVerticesTableSQL(s.config))
+	if err != nil {
+		return fmt.Errorf("failed to set up %s table: %w", s.config.VerticesTable, err)
+	}
+
+	return nil
+}
+
 // AddVertex implements graph.Store.AddVertex.
 func (s *Store[K, T]) AddVertex(hash K, value T, properties graph.VertexProperties) error {
 	valueBytes, err := json.Marshal(value)

@@ -19,7 +19,9 @@ CREATE TABLE %s (
 	weight INT,
 	attributes JSON,
 	data BLOB
-)`
+);`
+	dropVerticesTable = `DROP TABLE %s;`
+	dropEdgesTable    = `DROP TABLE %s;`
 )
 
 // DefaultConfig is a sane default configuration of the table schema. Using DefaultConfig when
@@ -54,5 +56,19 @@ func createEdgesTableSQL(c Config) string {
 		c.EdgesTable,
 		c.VertexHashType,
 		c.VertexHashType,
+	)
+}
+
+func dropVerticesTableSQL(c Config) string {
+	return fmt.Sprintf(
+		dropVerticesTable,
+		c.VerticesTable,
+	)
+}
+
+func dropEdgesTableSQL(c Config) string {
+	return fmt.Sprintf(
+		dropEdgesTable,
+		c.EdgesTable,
 	)
 }
